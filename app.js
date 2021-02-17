@@ -32,11 +32,9 @@ getRandomPhraseAsArray(phrases);
 //loops through an array of characters
 function addPhrasetoDisplay(arr) {
     for (let i = 0; i < arr.length; i++) {
-        let li = document.createElement('li'); //create li element
-        //get character inside
-        li.textContent = arr[i] //text content of li is arr[i]
+        let li = document.createElement('li'); //make li for the character
+        li.textContent = arr[i] //storing character as text content for li
         phrase.appendChild(li); //append li to phrase which is `#phrase ul`
-
         if (arr[i] === ' ') {
             li.className = 'space'; 
         } else {
@@ -49,8 +47,8 @@ const phraseArray = getRandomPhraseAsArray(phrases);
 addPhrasetoDisplay(phraseArray);
 
 function checkLetter(btn) {
-    let letter = document.getElementsByClassName('letter');
-    console.log(letter);
+    const checkLetter = document.getElementsByTagName('li');
+    let match = 'null';
 };
     /* get all elements with class letter 
     loop  over letters 
