@@ -12,19 +12,19 @@ startButton.addEventListener('click', (e) => {
 });
 
 let phrases = [
-    'treehouse techdegree',
-    'javascript array',
-    'object literal',
-    'for loop',
-    'conditional statement'
+    'blanket',
+    'monitor',
+    'office chair',
+    'coffee cup',
+    'keyboard'
 ];
 
 /*get random phrase
 split phrase into array of characters
 return array of characters*/
 function getRandomPhraseAsArray(arr) {
-    const rando =  arr[Math.floor(Math.random() * arr.length)];
-    return rando.split('')
+    const randomPhrase =  arr[Math.floor(Math.random() * arr.length)];
+    return randomPhrase.split('')
 };
 
 getRandomPhraseAsArray(phrases);
@@ -46,17 +46,40 @@ function addPhrasetoDisplay(arr) {
 const phraseArray = getRandomPhraseAsArray(phrases);
 addPhrasetoDisplay(phraseArray);
 
+let match = 'null';
+
 function checkLetter(btn) {
     const checkLetter = document.getElementsByTagName('li');
-    let match = 'null';
+    for (let i = 0; i < checkLetter.length; i++) {
+        if (btn.textContent === checkLetter[i].textContent) {
+            checkLetter[i].classList.add('show');
+            match = btn;
+        } 
+    }
+    return match;
 };
-    /* get all elements with class letter 
-    loop  over letters 
-    check if they match the letter in the button the player has chosen
-    if match
-        add "show" class to list item containing the letter 
-        store matching letter inside variable
-        return letter
-    else
-        return null
-        */
+
+qwerty.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+        e.target.className = 'chosen';
+        e.target.disabled = true; 
+    } else {
+        e.target.disabled = false;
+    }
+    const letter = checkLetter(e.target);
+    if (letter === null) {
+        let heartImage = document.getElementsByTagName('img');
+        heartImage[missed].src = 'images/lostHeart.png';
+        missed++;
+    }
+});
+
+function checkWin() {
+    let liLetter = document.getElementsByClassName('letter');
+    let liShow = document.getElementsByClassName('show');
+    
+    if (liLetter.length === liShow.length) {
+        overlay.classList.add('win');
+        overlay.style.display ='flex'
+    }
+}
