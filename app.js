@@ -1,13 +1,12 @@
 const qwerty = document.getElementById('qwerty');
 const phrase = document.querySelector('#phrase ul');
 
-let missed = 0;
-
 const startButton = document.getElementsByClassName('btn__reset')[0];
+
+const overlay = document.getElementById('overlay');
 
 //hide start overlay
 startButton.addEventListener('click', (e) => {
-    const overlay = document.getElementById('overlay');
     overlay.style.display = 'none';
 });
 
@@ -46,10 +45,9 @@ function addPhrasetoDisplay(arr) {
 const phraseArray = getRandomPhraseAsArray(phrases);
 addPhrasetoDisplay(phraseArray);
 
-let match = 'null';
-
 function checkLetter(btn) {
     const checkLetter = document.getElementsByTagName('li');
+    let match = 'null';
     for (let i = 0; i < checkLetter.length; i++) {
         if (btn.textContent === checkLetter[i].textContent) {
             checkLetter[i].classList.add('show');
@@ -59,27 +57,36 @@ function checkLetter(btn) {
     return match;
 };
 
-qwerty.addEventListener('click', (e) => {
-    if (e.target.tagName === 'BUTTON') {
-        e.target.className = 'chosen';
-        e.target.disabled = true; 
-    } else {
-        e.target.disabled = false;
-    }
-    const letter = checkLetter(e.target);
-    if (letter === null) {
-        let heartImage = document.getElementsByTagName('img');
-        heartImage[missed].src = 'images/lostHeart.png';
-        missed++;
-    }
-});
+let missed = 0;
 
-function checkWin() {
-    let liLetter = document.getElementsByClassName('letter');
-    let liShow = document.getElementsByClassName('show');
+qwerty.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
+        e.target.classList.add('chosen');
+        e.target.disabled = true; 
     
-    if (liLetter.length === liShow.length) {
-        overlay.classList.add('win');
-        overlay.style.display ='flex'
+        const letterFound = checkLetter(e.target);
+        console.log(letterFound);
+        if (letterFound === null) {
+            const liveHeart = document.querySelectorAll('#scoreboard img');
+            liveHeart[missed].src = 'images/lostHeart.png';
+            missed++
+        }
+
     }
-}
+    checkWin();
+
+    function checkWin() {
+        const letter = document.getElementsByClassName('letter');
+        const show = document.getElementsByClassName('show');
+        const title = document.querySelector('.title');
+        if (letter.length === show.length) {
+            overlay.classList.add('win');
+            title.innerHTML = 'You Win!';
+            overlay.style.display = 'flex'
+        } else if (missed > 5) {
+            title.innerHTML = 'Try again?';
+            overlay.classList.add('lose');
+            overlay.style.display = 'flex';
+        }
+    } 
+});
