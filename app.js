@@ -1,26 +1,20 @@
 const qwerty = document.getElementById('qwerty');
 const phrase = document.querySelector('#phrase ul');
-
 const startButton = document.getElementsByClassName('btn__reset')[0];
-
 const overlay = document.getElementById('overlay');
 
-//hide start overlay
 startButton.addEventListener('click', (e) => {
     overlay.style.display = 'none';
 });
 
 let phrases = [
-    'blanket',
-    'monitor',
-    'office chair',
-    'coffee cup',
-    'keyboard'
+    'espresso',
+    'latte',
+    'sweetener',
+    'coffee mug',
+    'teapot'
 ];
 
-/*get random phrase
-split phrase into array of characters
-return array of characters*/
 function getRandomPhraseAsArray(arr) {
     const randomPhrase =  arr[Math.floor(Math.random() * arr.length)];
     return randomPhrase.split('')
@@ -28,12 +22,11 @@ function getRandomPhraseAsArray(arr) {
 
 getRandomPhraseAsArray(phrases);
 
-//loops through an array of characters
 function addPhrasetoDisplay(arr) {
     for (let i = 0; i < arr.length; i++) {
-        let li = document.createElement('li'); //make li for the character
-        li.textContent = arr[i] //storing character as text content for li
-        phrase.appendChild(li); //append li to phrase which is `#phrase ul`
+        let li = document.createElement('li'); 
+        li.textContent = arr[i] 
+        phrase.appendChild(li); 
         if (arr[i] === ' ') {
             li.className = 'space'; 
         } else {
@@ -52,7 +45,7 @@ function checkLetter(btn) {
         if (btn.textContent === checkLetter[i].textContent) {
             checkLetter[i].classList.add('show');
             match = btn;
-        } 
+        }
     }
     return match;
 };
@@ -63,13 +56,13 @@ qwerty.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
         e.target.classList.add('chosen');
         e.target.disabled = true; 
-    
         const letterFound = checkLetter(e.target);
-        console.log(letterFound);
-        if (letterFound === null) {
+        console.log(letterFound.value);
+        if (letterFound.value === undefined) {
             const liveHeart = document.querySelectorAll('#scoreboard img');
             liveHeart[missed].src = 'images/lostHeart.png';
             missed++
+            console.log(missed);
         }
 
     }
@@ -82,11 +75,17 @@ qwerty.addEventListener('click', (e) => {
         if (letter.length === show.length) {
             overlay.classList.add('win');
             title.innerHTML = 'You Win!';
-            overlay.style.display = 'flex'
-        } else if (missed > 5) {
-            title.innerHTML = 'Try again?';
+            startButton.textContent = 'Play again?'
+            overlay.style.display = 'flex';
+            startButton.addEventListener('click', (e) =>
+                 window.location.reload());
+        } else if (missed >= 5) {
             overlay.classList.add('lose');
+            title.innerHTML = 'Try again?';
+            startButton.textContent = 'Play again'
             overlay.style.display = 'flex';
         }
+        startButton.addEventListener('click', (e) =>
+                 window.location.reload());
     } 
 });
